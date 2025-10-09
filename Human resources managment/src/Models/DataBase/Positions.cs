@@ -20,6 +20,8 @@ namespace Human_resources_managment.Models.DataBaseModels
 
         public NameVO Name { get; private set; }
 
+        public Employees Employee { get; private set; }
+
         public Result<Positions> Create(NameVO name)
         {
             return Result.Success(new Positions(name));

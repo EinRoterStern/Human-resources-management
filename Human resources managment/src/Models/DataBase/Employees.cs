@@ -32,8 +32,11 @@ namespace Human_resources_managment.Models.DataBaseModels
         public DateVO HireDate { get; private set; }
 
         public Guid PositionId { get; private set; }
+        public Positions Position { get; private set; }
 
         public Guid DepartmentId { get; private set; }
+
+        public Departments Department { get; private set; }
 
         public EmailVO Email { get; private set; }
 

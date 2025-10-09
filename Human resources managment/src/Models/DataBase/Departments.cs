@@ -24,6 +24,8 @@ namespace Human_resources_managment.Models.DataBaseModels
 
         public string? Description { get; private set; }
 
+        public Employees Employee { get; private set; }
+
         public Result<Departments> Create(NameVO name, string? description = null)
         {
             return Result.Success(new Departments(name, description));
