@@ -13,14 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Human_resources_managment.PositionWindow.UserControl
+
+namespace Human_resources_managment.DepartmentWindow.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для PositionControl.xaml
+    /// Логика взаимодействия для DepartmenAddControl.xaml
     /// </summary>
-    public partial class PositionControl : UserControl
+    public partial class DepartmenAddControl : UserControl
     {
-        public PositionControl()
+        public DepartmenAddControl()
         {
             InitializeComponent();
         }

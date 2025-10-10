@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Human_resources_managment.EmployeeWindow.UserControl
+namespace Human_resources_managment.EmployeeWindow.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для EmployeeAddControl.xaml
+    /// Логика взаимодействия для EmployeeControl.xaml
     /// </summary>
-    public partial class EmployeeAddControl : UserControl
+    public partial class EmployeeControl : UserControl
     {
-        public EmployeeAddControl()
+        public EmployeeControl()
         {
             InitializeComponent();
         }

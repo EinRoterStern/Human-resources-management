@@ -4,15 +4,97 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Human_resources_managment"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vmDepartment="clr-namespace:Human_resources_managment.DepartmentWindow.ViewModel"
+        xmlns:controlsDepartment="clr-namespace:Human_resources_managment.DepartmentWindow.UserControls"
+        xmlns:vmEmployee="clr-namespace:Human_resources_managment.EmployeeWindow.ViewModel"
+        xmlns:controlsEmployee="clr-namespace:Human_resources_managment.EmployeeWindow.UserControls"
+        xmlns:vmPosition="clr-namespace:Human_resources_managment.PositionWindow.ViewModel"
+        xmlns:controlsPosition="clr-namespace:Human_resources_managment.PositionWindow.UserControls" xmlns:viewmodel="clr-namespace:Human_resources_managment.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="Управление персоналом" MaxHeight="700" MaxWidth="1200" MinHeight="700" MinWidth="1200">
+        Title="Управление персоналом" MaxHeight="700" MaxWidth="1200" MinHeight="700" MinWidth="1200"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vmDepartment:DepartmenViewModel}">
+            <controlsDepartment:DepartmenControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmEmployee:EmployeeViewModel}">
+            <controlsEmployee:EmployeeControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmPosition:PositionViewModel}">
+            <controlsPosition:PositionControl />
+        </DataTemplate>
+
+
+    </Window.Resources>
+    
+    
     <Grid>
         <Grid >
-            <ContentControl x:Name="MainContentControl" />
+            <ContentControl x:Name="MainContentControl" Content="{Binding CurrentView}"/>
         </Grid>
 
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center"  Width="600" Height="500">
             <ContentControl x:Name="AddNewRowControl" />
         </Grid>
+
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding MainButton}">
+            <StackPanel Orientation="Horizontal" >
+
+                <Button Width="200" Height="200"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        materialDesign:ButtonAssist.CornerRadius="15"
+                        Command="{Binding OpenDepartmentCommand}"
+                        >
+                    <StackPanel Orientation="Vertical">
+                        <materialDesign:PackIcon
+                              Width="100"
+                              Height="100"
+                              HorizontalAlignment="Center"
+                              Kind="BankOutline" 
+                              
+                          />
+                        <TextBlock Text="Отделы" HorizontalAlignment="Center" FontSize="30"/>
+                    </StackPanel>
+                   
+                </Button>
+
+                <Button Width="200" Height="200" Margin="20 0 20 0"
+                         Style="{StaticResource MaterialDesignRaisedButton}"
+                            materialDesign:ButtonAssist.CornerRadius="15">
+                    <StackPanel Orientation="Vertical">
+                        <materialDesign:PackIcon
+                           Width="100"
+                           Height="100"
+                           HorizontalAlignment="Center"
+                           Kind="BadgeAccountHorizontalOutline" 
+                           
+                       />
+                        <TextBlock Text="Должности" HorizontalAlignment="Center" FontSize="30"/>
+                    </StackPanel>
+
+                </Button>
+
+                <Button Width="200" Height="200"
+                         materialDesign:ColorZoneAssist.Mode="Light"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        materialDesign:ButtonAssist.CornerRadius="15">
+                    <StackPanel Orientation="Vertical">
+                        <materialDesign:PackIcon
+                           Width="100"
+                           Height="100"
+                           HorizontalAlignment="Center"
+                           Kind="AccountMultipleOutline" 
+                           
+                       />
+                        <TextBlock Text="Сотрудники" HorizontalAlignment="Center" FontSize="30"/>
+                    </StackPanel>
+
+                </Button>
+            </StackPanel>
+        </Grid>
+        
     </Grid>
 </Window>
