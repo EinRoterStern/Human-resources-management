@@ -25,6 +25,28 @@
                 <Setter Property="materialDesign:ShadowAssist.ShadowAnimationDuration" Value="0:0:0"/>
             </Style>
 
+            <Style x:Key="mainText" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="36"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="Crimson"/>
+            </Style>
+
+            <Style x:Key="textHint" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="Panel.ZIndex" Value="1"/>
+                <Setter Property="Foreground" Value="#acb0af"/>
+            </Style>
+
+            <Style x:Key="textBox" TargetType="Control">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

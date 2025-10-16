@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Human_resources_managment.DepartmentWindow.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для DepartmenControl.xaml
+    /// Логика взаимодействия для DepartmentDeleteControl.xaml
     /// </summary>
-    public partial class DepartmenControl : UserControl
+    public partial class DepartmentDeleteControl : UserControl
     {
-        public DepartmenControl()
+        public DepartmentDeleteControl()
         {
             InitializeComponent();
         }
@@ -39,6 +39,23 @@ namespace Human_resources_managment.DepartmentWindow.UserControls
             else
             {
                 textSearch.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void textDesc_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            desc.Focus();
+        }
+
+        private void desc_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(desc.Text) && desc.Text.Length > 0)
+            {
+                textDesc.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textDesc.Visibility = Visibility.Visible;
             }
         }
     }

@@ -25,5 +25,39 @@ namespace Human_resources_managment.DepartmentWindow.UserControls
         {
             InitializeComponent();
         }
+
+        private void textSearch_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            search.Focus();
+        }
+
+        private void search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(search.Text) && search.Text.Length > 0)
+            {
+                textSearch.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textSearch.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void textDesc_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            desc.Focus();
+        }
+
+        private void desc_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(desc.Text) && desc.Text.Length > 0)
+            {
+                textDesc.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textDesc.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

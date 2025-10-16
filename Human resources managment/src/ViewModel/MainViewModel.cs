@@ -1,9 +1,11 @@
 ﻿using Human_resources_managment.Classes;
+using Human_resources_managment.DepartmentWindow.Model;
 using Human_resources_managment.DepartmentWindow.ViewModel;
 using Human_resources_managment.EmployeeWindow.ViewModel;
 using Human_resources_managment.PositionWindow.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +64,19 @@ namespace Human_resources_managment.ViewModel
             }
         }
 
+        private bool _enableCurrentView = true;
+        public bool EnableCurrentView
+        {
+            get => _enableCurrentView;
+            set
+            {
+                if (_enableCurrentView != value)
+                {
+                    _enableCurrentView = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public ICommand OpenDepartmentCommand { get; set; }
         public ICommand OpenEmployeeCommand { get; set; }
@@ -70,6 +85,12 @@ namespace Human_resources_managment.ViewModel
         private async void ExecuteOpenDepartment(object parameter)
         {
             MainButton = Visibility.Collapsed;
+            var refVM = new DepartmenViewModel(this);
+            CurrentView = refVM;
+        }
+
+        public async void RefreshDepartment()
+        {
             var refVM = new DepartmenViewModel(this);
             CurrentView = refVM;
         }
@@ -95,18 +116,18 @@ namespace Human_resources_managment.ViewModel
             MainButton = Visibility.Visible;
         }
 
+        public void OpenChangeDepartment(ObservableCollection<DepartmenDGModel> table)
+        {
+            var VM = new DepartmentChangeViewModel(this, table);
+            CurrentCenterControl = VM;
+        }
+
         public void CloseAddView()
         {
+            EnableCurrentView = true;
             CurrentCenterControl = null;
         }
 
-        public void NavigateToDepartmen()
-        {
-
-            var refVM = new DepartmenViewModel(this);
-            CurrentView = refVM;
-            //CurrentView = new AccountViewModel();
-        }
 
     }
 }

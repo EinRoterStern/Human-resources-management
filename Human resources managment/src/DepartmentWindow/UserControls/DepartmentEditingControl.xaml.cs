@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Human_resources_managment.DepartmentWindow.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для DepartmenControl.xaml
+    /// Логика взаимодействия для DepartmentEditingControl.xaml
     /// </summary>
-    public partial class DepartmenControl : UserControl
+    public partial class DepartmentEditingControl : UserControl
     {
-        public DepartmenControl()
+        public DepartmentEditingControl()
         {
             InitializeComponent();
         }
@@ -41,5 +41,23 @@ namespace Human_resources_managment.DepartmentWindow.UserControls
                 textSearch.Visibility = Visibility.Visible;
             }
         }
+
+        private void textDesc_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            desc.Focus();
+        }
+
+        private void desc_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(desc.Text) && desc.Text.Length > 0)
+            {
+                textDesc.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textDesc.Visibility = Visibility.Visible;
+            }
+        }
+
     }
 }

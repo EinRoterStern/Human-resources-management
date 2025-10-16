@@ -5,12 +5,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Human_resources_managment.DepartmentWindow.Model.dtoModel;
 
 namespace Human_resources_managment.ViewModel
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
-     
+       public static dtoDepartmentModel dtoDepartmentModel = new();
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

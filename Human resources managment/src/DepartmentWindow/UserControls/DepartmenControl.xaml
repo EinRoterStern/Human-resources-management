@@ -8,6 +8,68 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Content="Назад" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" Style="{StaticResource backBttn}"  />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Назад" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" Style="{StaticResource backBttn}" Command="{Binding BackCommand}" Cursor="Hand" />
+        <TextBlock  Text="Отделы" Style="{StaticResource mainText}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="42" Margin="0,10,0,0"/>
+        <Button Content="Изменить" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Style="{StaticResource backBttn}" Command="{Binding ChangeCommand}" />
+        
+        <StackPanel Orientation="Vertical"  Grid.Row="0" Margin="0 70 0 0">
+            <StackPanel Orientation="Horizontal">
+                <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="150" MaxWidth="200" HorizontalAlignment="Left" Margin="10 0 0 15">
+                    <Grid Margin="5">
+                        <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="Поиск" Style="{StaticResource textHint}" FontSize="20"/>
+                        <TextBox x:Name="search"  Foreground="Crimson" TextChanged="search_TextChanged"  CaretBrush="Black"  Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Tables}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" MinHeight="470" Margin="10"
+                AlternatingRowBackground="#FFFAFA" BorderBrush="#B0BEC5" BorderThickness="1" HeadersVisibility="All"
+                IsReadOnly="True" CanUserAddRows="False"  CanUserDeleteRows="False" SelectionMode="Extended" SelectionUnit="CellOrRowHeader">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                    <Setter Property="Background" Value="Crimson" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="FontWeight" Value="Bold" />
+
+
+                    <!-- Триггеры на состояние -->
+                    <Style.Triggers>
+                        <!-- Когда навели мышь -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="Cyan"/>
+                            <!--<Setter Property="Background" Value="#123456"/>  если хочешь менять фон -->
+                        </Trigger>
+                        <!-- Когда нажали на заголовок -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="Cyan"/>
+                        </Trigger>
+
+                        <!-- Когда отсортирован по возрастанию -->
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter Property="Foreground" Value="Cyan"/>
+                        </Trigger>
+
+                        <!-- Когда отсортирован по убыванию -->
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter Property="Foreground" Value="Cyan"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Наименование отдела" Binding="{Binding name}" Width="*" MinWidth="100"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding description}" Width="*" MinWidth="100"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+
     </Grid>
 </UserControl>

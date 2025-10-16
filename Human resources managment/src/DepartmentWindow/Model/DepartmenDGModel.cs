@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Human_resources_managment.DepartmentWindow.Model
 {
-    internal class DepartmenDGModel
+    public class DepartmenDGModel
     {
+        public string name { get; set; }
+        public string description { get; set; }
     }
 }
