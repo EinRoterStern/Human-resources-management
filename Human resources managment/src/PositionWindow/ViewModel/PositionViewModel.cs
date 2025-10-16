@@ -32,9 +32,9 @@ namespace Human_resources_managment.PositionWindow.ViewModel
         {
             Tables = new ObservableCollection<PositionDGModel>
             {
-               new PositionDGModel{ name = "IT" },
-               new PositionDGModel{ name = "Бухгалтерский" },
-               new PositionDGModel{ name = "ИЦ" }
+               new PositionDGModel{ name = "Инженер" },
+               new PositionDGModel{ name = "Инженер-программист" },
+               new PositionDGModel{ name = "Бухгалтер" }
                 
             };
             _collectionView = CollectionViewSource.GetDefaultView(Tables);
