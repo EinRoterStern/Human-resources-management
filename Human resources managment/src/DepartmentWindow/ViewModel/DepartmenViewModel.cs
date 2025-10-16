@@ -29,19 +29,19 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
 
         private async Task InitAsync()
         {
-            Tables = new ObservableCollection<DepartmenDGModel>
+            Tables = new ObservableCollection<DepartmentDGModel>
             {
-               new DepartmenDGModel{ name = "IT", description = "Технический отдел, отвечающий за все компьютеры в офисе" },
-               new DepartmenDGModel{ name = "Бухгалтерский", description = "Бухгалтерский отдел, отвечающий за деньги" },
-               new DepartmenDGModel{ name = "ИЦ", description = "Испытательный центр, испытывает все нововедения" }
+               new DepartmentDGModel{ name = "IT", description = "Технический отдел, отвечающий за все компьютеры в офисе" },
+               new DepartmentDGModel{ name = "Бухгалтерский", description = "Бухгалтерский отдел, отвечающий за деньги" },
+               new DepartmentDGModel{ name = "ИЦ", description = "Испытательный центр, испытывает все нововедения" }
 
             };
             _collectionView = CollectionViewSource.GetDefaultView(Tables);
             _collectionView.Filter = FilterProjects;
         }
 
-        private ObservableCollection<DepartmenDGModel> _tables;
-        public ObservableCollection<DepartmenDGModel> Tables
+        private ObservableCollection<DepartmentDGModel> _tables;
+        public ObservableCollection<DepartmentDGModel> Tables
         {
             get => _tables;
             set => SetProperty(ref _tables, value);
@@ -76,7 +76,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
 
         private bool FilterProjects(object obj)
         {
-            if (obj is DepartmenDGModel project)
+            if (obj is DepartmentDGModel project)
             {
                 if (string.IsNullOrWhiteSpace(Search))
                     return true;

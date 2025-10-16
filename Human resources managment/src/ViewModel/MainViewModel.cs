@@ -116,11 +116,12 @@ namespace Human_resources_managment.ViewModel
             MainButton = Visibility.Visible;
         }
 
-        public void OpenChangeDepartment(ObservableCollection<DepartmenDGModel> table)
+        public void OpenChangeDepartment(ObservableCollection<DepartmentDGModel> table)
         {
             var VM = new DepartmentChangeViewModel(this, table);
             CurrentCenterControl = VM;
         }
+
 
         public void CloseAddView()
         {

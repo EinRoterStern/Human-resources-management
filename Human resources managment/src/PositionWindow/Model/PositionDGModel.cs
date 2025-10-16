@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Human_resources_managment.PositionWindow.Model
 {
-    internal class PositionDGModel
+    public class PositionDGModel
     {
+        public string name { get; set; }
     }
 }

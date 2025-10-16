@@ -67,7 +67,8 @@
 
                 <Button Width="200" Height="200" Margin="20 0 20 0"
                          Style="{StaticResource MaterialDesignRaisedButton}"
-                            materialDesign:ButtonAssist.CornerRadius="15">
+                            materialDesign:ButtonAssist.CornerRadius="15"
+                        Command="{Binding OpenPositionCommand}">
                     <StackPanel Orientation="Vertical">
                         <materialDesign:PackIcon
                            Width="100"

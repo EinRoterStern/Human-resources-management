@@ -15,10 +15,10 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
     public class DepartmentChangeViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainWindowViewModel;
-        private readonly ObservableCollection<DepartmenDGModel> departmenDGModels;
+        private readonly ObservableCollection<DepartmentDGModel> departmenDGModels;
         public ObservableCollection<TabItemModel> Tabs { get; set; }
 
-        public DepartmentChangeViewModel(MainViewModel mainViewModel, ObservableCollection<DepartmenDGModel> table)
+        public DepartmentChangeViewModel(MainViewModel mainViewModel, ObservableCollection<DepartmentDGModel> table)
         {
             _mainWindowViewModel = mainViewModel;
             departmenDGModels = table;

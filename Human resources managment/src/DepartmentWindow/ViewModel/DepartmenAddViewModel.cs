@@ -17,9 +17,9 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
     {
         private readonly MainViewModel viewModel;
 
-        private readonly ObservableCollection<DepartmenDGModel> Tables;
+        private readonly ObservableCollection<DepartmentDGModel> Tables;
 
-        public DepartmenAddViewModel(MainViewModel viewModel, ObservableCollection<DepartmenDGModel> table)
+        public DepartmenAddViewModel(MainViewModel viewModel, ObservableCollection<DepartmentDGModel> table)
         {
             this.viewModel = viewModel;
             this.Tables = table;
@@ -65,7 +65,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
                 return;
             }
 
-            Tables.Add(new DepartmenDGModel
+            Tables.Add(new DepartmentDGModel
             {
                 name = Name,
                 description = Description

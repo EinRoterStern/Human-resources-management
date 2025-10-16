@@ -17,8 +17,8 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
     public class DepartmentEditingViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainViewModel;
-        private readonly ObservableCollection<DepartmenDGModel> _departmenDGModels;
-        public DepartmentEditingViewModel(MainViewModel mainViewModel, ObservableCollection<DepartmenDGModel> departmenDGModels) 
+        private readonly ObservableCollection<DepartmentDGModel> _departmenDGModels;
+        public DepartmentEditingViewModel(MainViewModel mainViewModel, ObservableCollection<DepartmentDGModel> departmenDGModels) 
         {
             _departmenDGModels = departmenDGModels;
             _mainViewModel = mainViewModel;
