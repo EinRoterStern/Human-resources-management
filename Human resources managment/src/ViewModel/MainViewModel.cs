@@ -2,6 +2,7 @@
 using Human_resources_managment.DepartmentWindow.Model;
 using Human_resources_managment.DepartmentWindow.ViewModel;
 using Human_resources_managment.EmployeeWindow.ViewModel;
+using Human_resources_managment.PositionWindow.Model;
 using Human_resources_managment.PositionWindow.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -109,6 +110,12 @@ namespace Human_resources_managment.ViewModel
             CurrentView = refVM;
         }
 
+        public async void RefreshPosition()
+        {
+            var refVM = new PositionViewModel(this);
+            CurrentView = refVM;
+        }
+
 
         public void BackToMainWindow()
         {
@@ -119,6 +126,12 @@ namespace Human_resources_managment.ViewModel
         public void OpenChangeDepartment(ObservableCollection<DepartmentDGModel> table)
         {
             var VM = new DepartmentChangeViewModel(this, table);
+            CurrentCenterControl = VM;
+        }
+
+        public void OpenChangePosition(ObservableCollection<PositionDGModel> table)
+        {
+            var VM = new PositionChangeViewModel(this, table);
             CurrentCenterControl = VM;
         }
 

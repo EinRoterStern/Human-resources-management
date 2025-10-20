@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Human_resources_managment.PositionWindow.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для PositionAddControl.xaml
+    /// Логика взаимодействия для PositionEditingControl.xaml
     /// </summary>
-    public partial class PositionAddControl : UserControl
+    public partial class PositionEditingControl : UserControl
     {
-        public PositionAddControl()
+        public PositionEditingControl()
         {
             InitializeComponent();
         }

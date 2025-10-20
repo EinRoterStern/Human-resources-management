@@ -71,8 +71,8 @@ namespace Human_resources_managment.PositionWindow.ViewModel
 
         private async void ExecuteOpenChange(object parameter)
         {
-            //_mainWindowViewModel.OpenChangeDepartment(Tables);
-            //_mainWindowViewModel.EnableCurrentView = false;
+            _mainWindowViewModel.OpenChangePosition(Tables);
+            _mainWindowViewModel.EnableCurrentView = false;
         }
 
         private bool FilterProjects(object obj)

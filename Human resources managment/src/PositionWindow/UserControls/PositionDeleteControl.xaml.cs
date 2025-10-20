@@ -16,15 +16,14 @@ using System.Windows.Shapes;
 namespace Human_resources_managment.PositionWindow.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для PositionAddControl.xaml
+    /// Логика взаимодействия для PositionDeleteControl.xaml
     /// </summary>
-    public partial class PositionAddControl : UserControl
+    public partial class PositionDeleteControl : UserControl
     {
-        public PositionAddControl()
+        public PositionDeleteControl()
         {
             InitializeComponent();
         }
-
         private void textSearch_MouseDown(object sender, MouseButtonEventArgs e)
         {
             search.Focus();
