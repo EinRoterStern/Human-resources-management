@@ -4,9 +4,58 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Human_resources_managment.EmployeeWindow.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+
+        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" >
+            <Grid Margin="5">
+                <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="ФИО" Style="{StaticResource textHint}" FontSize="20"/>
+                <TextBox x:Name="search"  Foreground="Crimson" TextChanged="search_TextChanged"  CaretBrush="Black"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+            </Grid>
+        </Border>
+
+        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <DatePicker Name="datePicker1" Padding="5"
+            SelectedDate="{Binding SelectedDateForPickerBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 materialDesign:HintAssist.Hint="Дата рождения" IsDropDownOpen="False"
+                 SelectedDateFormat="Short"  VerticalAlignment="Center"
+                 Foreground="Black"
+                 Background="Red"
+                 FontSize="18"
+                 materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
+                 Language="ru-RU">
+            </DatePicker>
+        </Border>
+
+        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <DatePicker Name="datePicker2" Padding="5"
+            SelectedDate="{Binding SelectedDateForPickerHire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 materialDesign:HintAssist.Hint="Дата приема" IsDropDownOpen="False"
+                 SelectedDateFormat="Short"  VerticalAlignment="Center"
+                 Foreground="Black"
+                 Background="Red"
+                 FontSize="18"
+                 materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
+                 Language="ru-RU">
+            </DatePicker>
+        </Border>
+
+        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <Grid Margin="5">
+                <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="Почта" Style="{StaticResource textHint}" FontSize="20"/>
+                <TextBox x:Name="email"  Foreground="Crimson" TextChanged="email_TextChanged"  CaretBrush="Black"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+            </Grid>
+        </Border>
+
+        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <Grid Margin="5">
+                <TextBlock x:Name="textPhone" MouseDown="textPhone_MouseDown" Text="Телефон" Style="{StaticResource textHint}" FontSize="20"/>
+                <TextBox x:Name="phone"  Foreground="Crimson" TextChanged="phone_TextChanged"  CaretBrush="Black"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+            </Grid>
+        </Border>
+
+        <Button Content="Сохранить" Margin="0 50 0 0" HorizontalAlignment="Center" FontSize="26" Height="45" Width="160" Style="{StaticResource backBttn}"  Cursor="Hand" Command="{Binding SaveCommand}"/>
+    </StackPanel>
 </UserControl>

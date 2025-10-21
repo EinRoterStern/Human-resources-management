@@ -24,5 +24,42 @@ namespace Human_resources_managment.EmployeeWindow.UserControls
         {
             InitializeComponent();
         }
+
+        private void textSearch_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            search.Focus();
+        }
+
+        private void search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(search.Text) && search.Text.Length > 0)
+            {
+                textSearch.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textSearch.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void textEmail_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void email_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void textPhone_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void phone_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

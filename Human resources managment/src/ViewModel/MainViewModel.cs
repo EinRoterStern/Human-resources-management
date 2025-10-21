@@ -1,6 +1,7 @@
 ﻿using Human_resources_managment.Classes;
 using Human_resources_managment.DepartmentWindow.Model;
 using Human_resources_managment.DepartmentWindow.ViewModel;
+using Human_resources_managment.EmployeeWindow.Model;
 using Human_resources_managment.EmployeeWindow.ViewModel;
 using Human_resources_managment.PositionWindow.Model;
 using Human_resources_managment.PositionWindow.ViewModel;
@@ -132,6 +133,12 @@ namespace Human_resources_managment.ViewModel
         public void OpenChangePosition(ObservableCollection<PositionDGModel> table)
         {
             var VM = new PositionChangeViewModel(this, table);
+            CurrentCenterControl = VM;
+        }
+
+        public void OpenChangeEmployee(ObservableCollection<EmployeeDGModel> table)
+        {
+            var VM = new EmployeeChangeViewModel(this, table);
             CurrentCenterControl = VM;
         }
 

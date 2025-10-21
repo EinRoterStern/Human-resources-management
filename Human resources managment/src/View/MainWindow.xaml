@@ -35,6 +35,10 @@
             <controlsPosition:PositionChangeControl />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vmEmployee:EmployeeChangeViewModel}">
+            <controlsEmployee:EmployeeChangeControl />
+        </DataTemplate>
+
 
     </Window.Resources>
     
@@ -89,7 +93,7 @@
                 <Button Width="200" Height="200"
                          materialDesign:ColorZoneAssist.Mode="Light"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        materialDesign:ButtonAssist.CornerRadius="15">
+                        materialDesign:ButtonAssist.CornerRadius="15" Command="{Binding OpenEmployeeCommand}">
                     <StackPanel Orientation="Vertical">
                         <materialDesign:PackIcon
                            Width="100"
