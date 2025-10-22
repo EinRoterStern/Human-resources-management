@@ -103,6 +103,11 @@ namespace Human_resources_managment.ViewModel
             var refVM = new EmployeeViewModel(this);
             CurrentView = refVM;
         }
+        public async void RefreshEmployee()
+        {
+            var refVM = new EmployeeViewModel(this);
+            CurrentView = refVM;
+        }
 
         private async void ExecuteOpenPosition(object parameter)
         {

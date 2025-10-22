@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Human_resources_managment.EmployeeWindow.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             
+             xmlns:validate="clr-namespace:Human_resources_managment.Classes.Validate"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
@@ -12,26 +14,32 @@
         <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" >
             <Grid Margin="5">
                 <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="ФИО" Style="{StaticResource textHint}" FontSize="20"/>
-                <TextBox x:Name="search"  Foreground="Crimson" TextChanged="search_TextChanged"  CaretBrush="Black"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+                <TextBox x:Name="search"  Foreground="Crimson" TextChanged="search_TextChanged"  CaretBrush="Black"  Text="{Binding FIO, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
             </Grid>
         </Border>
 
         <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
             <DatePicker Name="datePicker1" Padding="5"
-            SelectedDate="{Binding SelectedDateForPickerBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  materialDesign:HintAssist.Hint="Дата рождения" IsDropDownOpen="False"
+                 materialDesign:HintAssist.Foreground="Gray"
                  SelectedDateFormat="Short"  VerticalAlignment="Center"
                  Foreground="Black"
                  Background="Red"
                  FontSize="18"
                  materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
                  Language="ru-RU">
+                <DatePicker.SelectedDate>
+                    <Binding Path="SelectedDateForPickerBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validate:ValidateDate ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </DatePicker.SelectedDate>
             </DatePicker>
         </Border>
 
         <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
             <DatePicker Name="datePicker2" Padding="5"
-            SelectedDate="{Binding SelectedDateForPickerHire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  materialDesign:HintAssist.Hint="Дата приема" IsDropDownOpen="False"
                  SelectedDateFormat="Short"  VerticalAlignment="Center"
                  Foreground="Black"
@@ -39,23 +47,46 @@
                  FontSize="18"
                  materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
                  Language="ru-RU">
+                <DatePicker.SelectedDate>
+                    <Binding Path="SelectedDateForPickerHire" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validate:ValidateDate ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </DatePicker.SelectedDate>
             </DatePicker>
         </Border>
 
         <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
             <Grid Margin="5">
                 <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="Почта" Style="{StaticResource textHint}" FontSize="20"/>
-                <TextBox x:Name="email"  Foreground="Crimson" TextChanged="email_TextChanged"  CaretBrush="Black"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+                <TextBox x:Name="email" materialDesign:HintAssist.HelperText=""  Foreground="Crimson" TextChanged="email_TextChanged"  CaretBrush="Black" Background="Transparent"  Style="{StaticResource MaterialDesignFilledTextBox}" FontSize="20" Padding="2">
+                    <TextBox.Text>
+                        <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validate:ValidateEmail ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </Grid>
         </Border>
 
         <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
             <Grid Margin="5">
-                <TextBlock x:Name="textPhone" MouseDown="textPhone_MouseDown" Text="Телефон" Style="{StaticResource textHint}" FontSize="20"/>
-                <TextBox x:Name="phone"  Foreground="Crimson" TextChanged="phone_TextChanged"  CaretBrush="Black"  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+                <TextBlock x:Name="textPhone" MouseDown="textPhone_MouseDown" Text="Телефон" Style="{StaticResource textHint}" FontSize="20"></TextBlock>
+                <TextBox x:Name="phone"  materialDesign:HintAssist.HelperText=""  Foreground="Crimson" TextChanged="phone_TextChanged"  CaretBrush="Black"  Background="Transparent"  Style="{StaticResource MaterialDesignFilledTextBox}" FontSize="20" Padding="2">
+                    <TextBox.Text>
+                        <Binding Path="Phone" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validate:ValidatePhone ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </Grid>
         </Border>
 
-        <Button Content="Сохранить" Margin="0 50 0 0" HorizontalAlignment="Center" FontSize="26" Height="45" Width="160" Style="{StaticResource backBttn}"  Cursor="Hand" Command="{Binding SaveCommand}"/>
+        <Button Content="Сохранить" Margin="0 40 0 0" HorizontalAlignment="Center" FontSize="26" Height="45" Width="160" Style="{StaticResource backBttn}"  Cursor="Hand" Command="{Binding SaveCommand}"/>
     </StackPanel>
 </UserControl>
