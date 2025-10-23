@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Human_resources_managment.EmployeeWindow.Model
 {
-    internal class EmployeeAddModel
+    public class EmployeeEditingModel
     {
     }
 }

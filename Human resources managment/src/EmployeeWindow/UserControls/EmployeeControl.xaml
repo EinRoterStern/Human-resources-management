@@ -69,6 +69,8 @@
                 <DataGridTextColumn Header="Дата приема" Binding="{Binding hireDate}" Width="*" MinWidth="100"/>
                 <DataGridTextColumn Header="Почта" Binding="{Binding email}" Width="*" MinWidth="100"/>
                 <DataGridTextColumn Header="Телефон" Binding="{Binding phone}" Width="*" MinWidth="100"/>
+                <DataGridTextColumn Header="Отдел" Binding="{Binding departmentName}" Width="*" MinWidth="100"/>
+                <DataGridTextColumn Header="Должность" Binding="{Binding positionName}" Width="*" MinWidth="100"/>
             </DataGrid.Columns>
         </DataGrid>
 

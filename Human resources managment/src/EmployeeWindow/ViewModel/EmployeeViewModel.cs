@@ -31,9 +31,9 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
         {
             Tables = new ObservableCollection<EmployeeDGModel>
             {
-               new EmployeeDGModel{ FIO = "Абдула Али", birthDate = DateOnly.ParseExact("22.04.2004", "dd.MM.yyyy"), hireDate = DateOnly.ParseExact("22.04.2025", "dd.MM.yyyy"), email = "amail@mail.ru", phone = "89999999999" },
-               new EmployeeDGModel{ FIO = "Резников Константин Игоревич", birthDate = DateOnly.ParseExact("01.12.2000", "dd.MM.yyyy"), hireDate = DateOnly.ParseExact("22.04.2024", "dd.MM.yyyy"), email = "pamail@mail.ru", phone = "89889999966" },
-               new EmployeeDGModel{ FIO = "Игнатьев Валентайн Архипович", birthDate = DateOnly.ParseExact("15.08.1980", "dd.MM.yyyy"), hireDate = DateOnly.ParseExact("01.01.2000", "dd.MM.yyyy"), email = "mamail@mail.ru", phone = "89779999933" }
+               new EmployeeDGModel{ FIO = "Абдула Али", birthDate = DateOnly.ParseExact("22.04.2004", "dd.MM.yyyy"), hireDate = DateOnly.ParseExact("22.04.2025", "dd.MM.yyyy"), email = "amail@mail.ru", phone = "89999999999", departmentName = "Сильный", positionName = "Директор" },
+               new EmployeeDGModel{ FIO = "Резников Константин Игоревич", birthDate = DateOnly.ParseExact("01.12.2000", "dd.MM.yyyy"), hireDate = DateOnly.ParseExact("22.04.2024", "dd.MM.yyyy"), email = "pamail@mail.ru", phone = "89889999966", departmentName = "Слабый", positionName = "Работяга" },
+               new EmployeeDGModel{ FIO = "Игнатьев Валентайн Архипович", birthDate = DateOnly.ParseExact("15.08.1980", "dd.MM.yyyy"), hireDate = DateOnly.ParseExact("01.01.2000", "dd.MM.yyyy"), email = "mamail@mail.ru", phone = "89779999933", departmentName = "Умеренный", positionName = "Менеджер" }
 
             };
             _collectionView = CollectionViewSource.GetDefaultView(Tables);

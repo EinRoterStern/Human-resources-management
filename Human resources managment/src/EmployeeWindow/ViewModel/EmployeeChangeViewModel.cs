@@ -69,10 +69,10 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
         {
             if (tab.Header == "Добавить")
                 tab.ContentViewModel = new EmployeeAddViewModel(_mainWindowViewModel, _employeeDGModels);
-            //if (tab.Header == "Изменить")
-            //    tab.ContentViewModel = new DepartmentEditingViewModel(_mainWindowViewModel, departmenDGModels);
-            //if (tab.Header == "Удалить")
-            //    tab.ContentViewModel = new DepartmentDeleteViewModel(_mainWindowViewModel, departmenDGModels);
+            if (tab.Header == "Изменить")
+                tab.ContentViewModel = new EmployeeEditingViewModel(_mainWindowViewModel, _employeeDGModels);
+            if (tab.Header == "Удалить")
+                tab.ContentViewModel = new EmployeeDeleteViewModel(_mainWindowViewModel, _employeeDGModels);
         }
 
 

@@ -86,6 +86,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
             { _oldDescription = value; OnPropertyChanged(); }
         }
 
+
         private object _selectedProj;
         public object SelectedProj
         {
