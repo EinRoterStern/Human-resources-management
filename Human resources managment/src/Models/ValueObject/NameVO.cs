@@ -9,6 +9,12 @@ namespace Human_resources_managment.Models.ValueObjectModels
 {
     public record NameVO
     {
+
+        private NameVO()
+        {
+            Name = string.Empty;
+        }
+
         private NameVO (string name)
         {
             Name = name;

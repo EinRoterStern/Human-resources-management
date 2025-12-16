@@ -1,16 +1,18 @@
-﻿using Human_resources_managment.Classes;
-using Human_resources_managment.DepartmentWindow.Model;
-using Human_resources_managment.PositionWindow.Model;
-using Human_resources_managment.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Human_resources_managment.Classes;
+using Human_resources_managment.DepartmentWindow.Model;
+using Human_resources_managment.EmployeeWindow.Model;
+using Human_resources_managment.PositionWindow.Model;
+using Human_resources_managment.ViewModel;
 
 namespace Human_resources_managment.PositionWindow.ViewModel
 {
@@ -30,15 +32,27 @@ namespace Human_resources_managment.PositionWindow.ViewModel
 
         private async Task InitAsync()
         {
-            Tables = new ObservableCollection<PositionDGModel>
-            {
-               new PositionDGModel{ name = "Инженер" },
-               new PositionDGModel{ name = "Инженер-программист" },
-               new PositionDGModel{ name = "Бухгалтер" }
+            //Tables = new ObservableCollection<PositionDGModel>
+            //{
+            //   new PositionDGModel{ name = "Инженер" },
+            //   new PositionDGModel{ name = "Инженер-программист" },
+            //   new PositionDGModel{ name = "Бухгалтер" }
                 
-            };
-            _collectionView = CollectionViewSource.GetDefaultView(Tables);
-            _collectionView.Filter = FilterProjects;
+            //};
+            //_collectionView = CollectionViewSource.GetDefaultView(Tables);
+            //_collectionView.Filter = FilterProjects;
+
+            var (positionDG, message) = await DataBaseHelper.GetPositionTable();
+            if (positionDG != null)
+            {
+                Tables = new ObservableCollection<PositionDGModel>(positionDG.ToList());
+                _collectionView = CollectionViewSource.GetDefaultView(Tables);
+                _collectionView.Filter = FilterProjects;
+            }
+            else
+            {
+                MessageBox.Show($"Ошибка: {message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private ObservableCollection<PositionDGModel> _tables;

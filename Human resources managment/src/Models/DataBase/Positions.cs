@@ -16,6 +16,8 @@ namespace Human_resources_managment.Models.DataBaseModels
             Name = name;
         }
 
+        private Positions() { }
+
         public Guid Id { get; private set; }
 
         public NameVO Name { get; private set; }

@@ -1,10 +1,11 @@
-﻿using CSharpFunctionalExtensions;
-using Human_resources_managment.Models.ValueObjectModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
+using Human_resources_managment.Models.ValueObjectModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Human_resources_managment.Models.DataBaseModels
 {
@@ -18,6 +19,9 @@ namespace Human_resources_managment.Models.DataBaseModels
             Description = description;
         }
 
+        // ⚠️ EF Core ТРЕБУЕТ этот конструктор(может быть private!)
+        private Departments() { }
+
         public Guid Id { get; private set; }
 
         public NameVO Name { get; private set; }
@@ -26,7 +30,7 @@ namespace Human_resources_managment.Models.DataBaseModels
 
         public Employees Employee { get; private set; }
 
-        public Result<Departments> Create(NameVO name, string? description = null)
+        public static Result<Departments> Create(NameVO name, string? description = null)
         {
             return Result.Success(new Departments(name, description));
         }

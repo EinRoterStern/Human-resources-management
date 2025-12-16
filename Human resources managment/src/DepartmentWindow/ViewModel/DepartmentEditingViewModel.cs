@@ -17,10 +17,10 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
     public class DepartmentEditingViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainViewModel;
-        private readonly ObservableCollection<DepartmentDGModel> _departmenDGModels;
+        //private readonly ObservableCollection<DepartmentDGModel> _departmenDGModels;
         public DepartmentEditingViewModel(MainViewModel mainViewModel, ObservableCollection<DepartmentDGModel> departmenDGModels) 
         {
-            _departmenDGModels = departmenDGModels;
+            //_departmenDGModels = departmenDGModels;
             _mainViewModel = mainViewModel;
             _ = InitAsync();
 
@@ -29,21 +29,42 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
         public async Task InitAsync()
         {
 
-            if(_departmenDGModels == null)
+            var (departmentDG, message) = await DataBaseHelper.GetDepartmentTable();
+            if (departmentDG != null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
-                return;
-            }
-            if (_departmenDGModels.Count > 0)
-            {
-                FilteredProject = CollectionViewSource.GetDefaultView(_departmenDGModels.Select(d => d.name));
-                FilteredProject.Filter = FilterProject;
+                DepartmenDGModels = new ObservableCollection<DepartmentDGModel>(departmentDG.ToList());
             }
             else
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
+            {
+                MessageBox.Show($"Ошибка: {message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                //FilteredProject = new ObservableCollection<DepartmentDGModel>("Не удалось получить список отделов");
+                DepartmenDGModels = new ObservableCollection<DepartmentDGModel>(null);
+                return;
+            }
+
+            //if (_departmenDGModels == null)
+            //{
+            //    MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
+            //    return;
+            //}
+            //if (_departmenDGModels.Count > 0)
+            //{
+            //    FilteredProject = CollectionViewSource.GetDefaultView(_departmenDGModels.Select(d => d.name));
+            //    FilteredProject.Filter = FilterProject;
+            //}
+            //else
+            //    FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
 
         }
+
+        private ObservableCollection<DepartmentDGModel> _departmenDGModels;
+        public ObservableCollection<DepartmentDGModel> DepartmenDGModels
+        {
+            get => _departmenDGModels;
+            set => SetProperty(ref _departmenDGModels, value);
+        }
+
 
         private string _oldName;
         public string OldName
@@ -87,8 +108,8 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
         }
 
 
-        private object _selectedProj;
-        public object SelectedProj
+        private Guid _selectedProj;
+        public Guid SelectedProj
         {
             get => _selectedProj;
             set
@@ -97,51 +118,23 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
                 OnPropertyChanged();
                 if (_selectedProj != null && _selectedProj.ToString() != "Не удалось получить список отделов")
                 {
-                    LoadDepart(_selectedProj.ToString());
+                    LoadDepart(_selectedProj);
                 }
             }
         }
 
-        private ICollectionView _filteredProject;
-        public ICollectionView FilteredProject
-        {
-            get => _filteredProject;
-            set { _filteredProject = value; OnPropertyChanged(); }
-        }
 
-        private string _filterTextProject;
-        public string FilterTextProject
+        private void LoadDepart(Guid id)
         {
-            get => _filterTextProject;
-            set
-            {
-                _filterTextProject = value;
-                OnPropertyChanged();
-                FilteredProject.Refresh(); // обновляем фильтр
-            }
-        }
-
-        private bool FilterProject(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextProject) ||
-                       supply.ToLower().Contains(FilterTextProject.ToLower());
-            }
-            return false;
-        }
-
-        private void LoadDepart(string depart)
-        {
-            OldDescription = _departmenDGModels.FirstOrDefault(d => d.name == depart).description;
-            OldName = depart;
+            OldDescription = _departmenDGModels.FirstOrDefault(d => d.id == id).description;
+            OldName = _departmenDGModels.FirstOrDefault(d => d.id == id).name;
         }
 
         public ICommand SaveCommand { get; set; }
 
         private async void ExecuteSave(object obj)
         {
-            if (SelectedProj == "Не удалось получить список отделов" || SelectedProj == null)
+            if (SelectedProj == null)
             {
                 MessageBox.Show("Не выбран отдел!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -160,7 +153,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
             }
 
 
-            SelectedProj = null;
+            SelectedProj = Guid.Empty;
             _mainViewModel.CloseAddView();
             _mainViewModel.RefreshDepartment();
         }

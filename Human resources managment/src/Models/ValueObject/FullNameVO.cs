@@ -10,6 +10,14 @@ namespace Human_resources_managment.Models.ValueObjectModels
 {
     public record FullNameVO
     {
+
+        private FullNameVO()
+        {
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            MidleName = null;
+        }
+
         private FullNameVO(string firstName, string lastName, string? midleName = null)
         {
             FirstName = firstName;

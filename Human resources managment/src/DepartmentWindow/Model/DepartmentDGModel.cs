@@ -10,5 +10,7 @@ namespace Human_resources_managment.DepartmentWindow.Model
     {
         public string name { get; set; }
         public string description { get; set; }
+
+        public Guid? id { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace Human_resources_managment.Models.DataBaseModels
             Phone = phone;
         }
 
+        private Employees() { }
         public Guid Id { get; private set; }
 
         public FullNameVO FullName { get; private set; }

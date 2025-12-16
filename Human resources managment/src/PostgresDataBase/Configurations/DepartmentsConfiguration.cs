@@ -33,7 +33,8 @@ namespace Human_resources_managment.PostgresDataBase.Configurations
         {
             builder.Property(b => b.Id)
                 .IsRequired()
-                .HasColumnName("id");
+                .HasColumnName("id")
+                .HasColumnType("uuid");
 
             builder.Property(b => b.Description)
                 .IsRequired(false)

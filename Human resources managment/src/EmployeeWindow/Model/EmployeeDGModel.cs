@@ -16,6 +16,11 @@ namespace Human_resources_managment.EmployeeWindow.Model
         public string email {  get; set; }
         public string phone { get; set; }
 
+        public Guid? id { get; set; }
+
+        public Guid? positionId { get; set; }
+        public Guid? departmentId { get; set; }
+
 
     }
 }

@@ -11,6 +11,10 @@ namespace Human_resources_managment.Models.ValueObject
 {
     public record PhoneVO
     {
+        private PhoneVO()
+        {
+            Phone = string.Empty;
+        }
         private PhoneVO(string phone) 
         {
             Phone = phone;

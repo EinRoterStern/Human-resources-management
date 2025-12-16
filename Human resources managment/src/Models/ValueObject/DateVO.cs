@@ -10,6 +10,11 @@ namespace Human_resources_managment.Models.ValueObjectModels
 {
     public record DateVO
     {
+        public DateVO()
+        {
+            Date = DateOnly.MinValue; // или throw — но EF Core вызовет его, так что лучше MinValue
+        }
+
         private DateVO(DateOnly dateOnly) 
         {
             Date = dateOnly;

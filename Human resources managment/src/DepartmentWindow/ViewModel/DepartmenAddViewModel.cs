@@ -65,17 +65,28 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
                 return;
             }
 
-            Tables.Add(new DepartmentDGModel
+            //Tables.Add(new DepartmentDGModel
+            //{
+            //    name = Name,
+            //    description = Description
+            //});
+
+            var(success, message) = await DataBaseHelper.AddDepartment(Name, Description);
+            if (success)
             {
-                name = Name,
-                description = Description
-            });
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            Name = null;
-            Description = null;
+                Name = null;
+                Description = null;
 
-            viewModel.CloseAddView();
-            viewModel.RefreshDepartment();
+                viewModel.CloseAddView();
+                viewModel.RefreshDepartment();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
     }
 }
