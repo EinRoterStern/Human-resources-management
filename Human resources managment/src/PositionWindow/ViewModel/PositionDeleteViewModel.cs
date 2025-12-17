@@ -18,11 +18,11 @@ namespace Human_resources_managment.PositionWindow.ViewModel
     public class PositionDeleteViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainViewModel;
-        private readonly ObservableCollection<PositionDGModel> _positionDGModels;
+        //private readonly ObservableCollection<PositionDGModel> _positionDGModels;
         public PositionDeleteViewModel(MainViewModel mainViewModel, ObservableCollection<PositionDGModel> positionDGs) 
         {
             _mainViewModel = mainViewModel;
-            _positionDGModels = positionDGs;
+            //_positionDGModels = positionDGs;
 
             _ = InitAsync();
 
@@ -31,21 +31,26 @@ namespace Human_resources_managment.PositionWindow.ViewModel
 
         public async Task InitAsync()
         {
-
-            if (_positionDGModels == null)
+            var (positionDG, message) = await DataBaseHelper.GetPositionTable();
+            if (positionDG != null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список должностей");
-                return;
-            }
-            if (_positionDGModels.Count > 0)
-            {
-                FilteredProject = CollectionViewSource.GetDefaultView(_positionDGModels.Select(d => d.name));
-                FilteredProject.Filter = FilterProject;
+                PositionDGModels = new ObservableCollection<PositionDGModel>(positionDG.ToList());
             }
             else
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список должностей");
+            {
+                MessageBox.Show($"Ошибка: {message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                PositionDGModels = new ObservableCollection<PositionDGModel>(null);
+                return;
+            }
 
+
+        }
+
+        private ObservableCollection<PositionDGModel> _positionDGModels;
+        public ObservableCollection<PositionDGModel> PositionDGModels
+        {
+            get => _positionDGModels;
+            set => SetProperty(ref _positionDGModels, value);
         }
 
         private string _name;
@@ -59,67 +64,51 @@ namespace Human_resources_managment.PositionWindow.ViewModel
             }
         }
 
-        private object _selectedProj;
-        public object SelectedProj
+        private Guid _selectedProj;
+        public Guid SelectedProj
         {
             get => _selectedProj;
             set
             {
                 _selectedProj = value;
                 OnPropertyChanged();
-                if (_selectedProj != null && _selectedProj.ToString() != "Не удалось получить список должностей")
+                if (_selectedProj != Guid.Empty)
                 {
-                    LoadDepart(_selectedProj.ToString());
+                    LoadDepart(_selectedProj);
                 }
             }
         }
 
-        private ICollectionView _filteredProject;
-        public ICollectionView FilteredProject
-        {
-            get => _filteredProject;
-            set { _filteredProject = value; OnPropertyChanged(); }
-        }
+       
 
-        private string _filterTextProject;
-        public string FilterTextProject
+        private void LoadDepart(Guid id)
         {
-            get => _filterTextProject;
-            set
-            {
-                _filterTextProject = value;
-                OnPropertyChanged();
-                FilteredProject.Refresh(); // обновляем фильтр
-            }
-        }
-
-        private bool FilterProject(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextProject) ||
-                       supply.ToLower().Contains(FilterTextProject.ToLower());
-            }
-            return false;
-        }
-
-        private void LoadDepart(string depart)
-        {
-            Name = depart;
+            Name = _positionDGModels.FirstOrDefault(d => d.id == id).name;
         }
 
         public ICommand DeleteCommand { get; set; }
         private async void ExecuteDelete(object obj)
         {
-            if (SelectedProj == "Не удалось получить список должностей" || SelectedProj == null)
+            if (SelectedProj == Guid.Empty)
             {
                 MessageBox.Show("Не выбрана должность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            SelectedProj = null;
-            _mainViewModel.CloseAddView();
-            _mainViewModel.RefreshPosition();
+            var (success, message) = await DataBaseHelper.DeletePosition(SelectedProj);
+            if (success)
+            {
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+                SelectedProj = Guid.Empty;
+                _mainViewModel.CloseAddView();
+                _mainViewModel.RefreshPosition();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
         }
 
     }

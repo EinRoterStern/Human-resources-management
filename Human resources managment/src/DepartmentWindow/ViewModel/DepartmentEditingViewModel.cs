@@ -42,20 +42,6 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
                 return;
             }
 
-            //if (_departmenDGModels == null)
-            //{
-            //    MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
-            //    return;
-            //}
-            //if (_departmenDGModels.Count > 0)
-            //{
-            //    FilteredProject = CollectionViewSource.GetDefaultView(_departmenDGModels.Select(d => d.name));
-            //    FilteredProject.Filter = FilterProject;
-            //}
-            //else
-            //    FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
-
         }
 
         private ObservableCollection<DepartmentDGModel> _departmenDGModels;
@@ -116,7 +102,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
             {
                 _selectedProj = value;
                 OnPropertyChanged();
-                if (_selectedProj != null && _selectedProj.ToString() != "Не удалось получить список отделов")
+                if (_selectedProj != Guid.Empty)
                 {
                     LoadDepart(_selectedProj);
                 }
@@ -134,7 +120,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
 
         private async void ExecuteSave(object obj)
         {
-            if (SelectedProj == null)
+            if (SelectedProj == Guid.Empty)
             {
                 MessageBox.Show("Не выбран отдел!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -152,10 +138,21 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
                 return;
             }
 
+            var(success, message) = await DataBaseHelper.UpdateDepartment(SelectedProj, Name, Description);
+            if (success)
+            {
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            SelectedProj = Guid.Empty;
-            _mainViewModel.CloseAddView();
-            _mainViewModel.RefreshDepartment();
+                SelectedProj = Guid.Empty;
+                _mainViewModel.CloseAddView();
+                _mainViewModel.RefreshDepartment();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+  
         }
 
     }

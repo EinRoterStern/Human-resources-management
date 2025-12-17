@@ -17,10 +17,8 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
     public class DepartmentDeleteViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainViewModel;
-        private readonly ObservableCollection<DepartmentDGModel> _departmenDGModels;
         public DepartmentDeleteViewModel(MainViewModel mainViewModel, ObservableCollection<DepartmentDGModel> departmenDGModels) 
         {
-            _departmenDGModels = departmenDGModels;
             _mainViewModel = mainViewModel;
 
             _ = InitAsync();
@@ -31,20 +29,25 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
         public async Task InitAsync()
         {
 
-            if (_departmenDGModels == null)
+            var (departmentDG, message) = await DataBaseHelper.GetDepartmentTable();
+            if (departmentDG != null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
-                return;
-            }
-            if (_departmenDGModels.Count > 0)
-            {
-                FilteredProject = CollectionViewSource.GetDefaultView(_departmenDGModels.Select(d => d.name));
-                FilteredProject.Filter = FilterProject;
+                DepartmenDGModels = new ObservableCollection<DepartmentDGModel>(departmentDG.ToList());
             }
             else
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
+            {
+                MessageBox.Show($"Ошибка: {message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                DepartmenDGModels = new ObservableCollection<DepartmentDGModel>(null);
+                return;
+            }
 
+        }
+
+        private ObservableCollection<DepartmentDGModel> _departmenDGModels;
+        public ObservableCollection<DepartmentDGModel> DepartmenDGModels
+        {
+            get => _departmenDGModels;
+            set => SetProperty(ref _departmenDGModels, value);
         }
 
         private string _name;
@@ -69,68 +72,52 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
             }
         }
 
-        private object _selectedProj;
-        public object SelectedProj
+        private Guid _selectedProj;
+        public Guid SelectedProj
         {
             get => _selectedProj;
             set
             {
                 _selectedProj = value;
                 OnPropertyChanged();
-                if (_selectedProj != null && _selectedProj.ToString() != "Не удалось получить список отделов")
+                if (_selectedProj != Guid.Empty)
                 {
-                    LoadDepart(_selectedProj.ToString());
+                    LoadDepart(_selectedProj);
                 }
             }
         }
 
-        private ICollectionView _filteredProject;
-        public ICollectionView FilteredProject
-        {
-            get => _filteredProject;
-            set { _filteredProject = value; OnPropertyChanged(); }
-        }
 
-        private string _filterTextProject;
-        public string FilterTextProject
+        private void LoadDepart(Guid id)
         {
-            get => _filterTextProject;
-            set
-            {
-                _filterTextProject = value;
-                OnPropertyChanged();
-                FilteredProject.Refresh(); // обновляем фильтр
-            }
-        }
-
-        private bool FilterProject(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextProject) ||
-                       supply.ToLower().Contains(FilterTextProject.ToLower());
-            }
-            return false;
-        }
-
-        private void LoadDepart(string depart)
-        {
-            Description = _departmenDGModels.FirstOrDefault(d => d.name == depart).description;
-            Name = depart;
+            Description = _departmenDGModels.FirstOrDefault(d => d.id == id).description;
+            Name = _departmenDGModels.FirstOrDefault(d => d.id == id).name;
         }
 
         public ICommand DeleteCommand { get; set; }
         private async void ExecuteDelete(object obj)
         {
-            if (SelectedProj == "Не удалось получить список отделов" || SelectedProj == null)
+            if (SelectedProj == Guid.Empty)
             {
                 MessageBox.Show("Не выбран отдел!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            SelectedProj = null;
-            _mainViewModel.CloseAddView();
-            _mainViewModel.RefreshDepartment();
+            var (success, message) = await DataBaseHelper.DeleteDepartment(SelectedProj);
+            if (success)
+            {
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+                SelectedProj = Guid.Empty;
+                _mainViewModel.CloseAddView();
+                _mainViewModel.RefreshDepartment();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            
         }
     }
 }

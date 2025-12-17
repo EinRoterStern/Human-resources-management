@@ -18,11 +18,11 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
     public class EmployeeDeleteViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainWindowViewModel;
-        private readonly ObservableCollection<EmployeeDGModel> _employeeDGModels;
+        //private readonly ObservableCollection<EmployeeDGModel> _employeeDGModels;
 
         public EmployeeDeleteViewModel(MainViewModel mainView, ObservableCollection<EmployeeDGModel> employeeDGs)
         {
-            _employeeDGModels = employeeDGs;
+           // _employeeDGModels = employeeDGs;
             _mainWindowViewModel = mainView;
 
             _ = InitAsync();
@@ -32,21 +32,26 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
 
         public async Task InitAsync()
         {
-
-            if (_employeeDGModels == null)
+            var (employeeDG, messageEmpl) = await DataBaseHelper.GetEmployeeTable();
+            if (employeeDG != null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список сотрудников");
-                return;
-            }
-            if (_employeeDGModels.Count > 0)
-            {
-                FilteredProject = CollectionViewSource.GetDefaultView(_employeeDGModels.Select(d => d.FIO));
-                FilteredProject.Filter = FilterProject;
+                EmployeeDGModels = new ObservableCollection<EmployeeDGModel>(employeeDG.ToList());
             }
             else
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список сотрудников");
+            {
+                MessageBox.Show($"Ошибка: {messageEmpl}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                EmployeeDGModels = new ObservableCollection<EmployeeDGModel>(null);
+                return;
+            }
 
+
+        }
+
+        private ObservableCollection<EmployeeDGModel> _employeeDGModels;
+        public ObservableCollection<EmployeeDGModel> EmployeeDGModels
+        {
+            get => _employeeDGModels;
+            set => SetProperty(ref _employeeDGModels, value);
         }
 
         private string _email;
@@ -85,69 +90,54 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
             }
         }
 
-        private object _selectedProj;
-        public object SelectedProj
+        private Guid _selectedProj;
+        public Guid SelectedProj
         {
             get => _selectedProj;
             set
             {
                 _selectedProj = value;
                 OnPropertyChanged();
-                if (_selectedProj != null && _selectedProj.ToString() != "Не удалось получить список сотрудников")
+                if (_selectedProj != Guid.Empty)
                 {
-                    LoadEmployee(_selectedProj.ToString());
+                    LoadEmployee(_selectedProj);
                 }
             }
         }
 
-        private ICollectionView _filteredProject;
-        public ICollectionView FilteredProject
-        {
-            get => _filteredProject;
-            set { _filteredProject = value; OnPropertyChanged(); }
-        }
 
-        private string _filterTextProject;
-        public string FilterTextProject
+        private void LoadEmployee(Guid id)
         {
-            get => _filterTextProject;
-            set
-            {
-                _filterTextProject = value;
-                OnPropertyChanged();
-                FilteredProject.Refresh(); // обновляем фильтр
-            }
-        }
-
-        private bool FilterProject(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextProject) ||
-                       supply.ToLower().Contains(FilterTextProject.ToLower());
-            }
-            return false;
-        }
-
-        private void LoadEmployee(string emp)
-        {
-            FIO = _employeeDGModels.FirstOrDefault(d => d.FIO == emp).FIO;
-            Email = _employeeDGModels.FirstOrDefault(d => d.FIO == emp).email;
-            Phone = _employeeDGModels.FirstOrDefault(d => d.FIO == emp).phone;
+            FIO = _employeeDGModels.FirstOrDefault(d => d.id == id).FIO;
+            Email = _employeeDGModels.FirstOrDefault(d => d.id == id).email;
+            Phone = _employeeDGModels.FirstOrDefault(d => d.id == id).phone;
         }
 
         public ICommand DeleteCommand { get; set; }
         private async void ExecuteDelete(object obj)
         {
-            if (SelectedProj == "Не удалось получить список сотрудников" || SelectedProj == null)
+            if (SelectedProj == Guid.Empty)
             {
                 MessageBox.Show("Не выбран сотрудник!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            SelectedProj = null;
-            _mainWindowViewModel.CloseAddView();
-            _mainWindowViewModel.RefreshEmployee();
+            var (success, message) = await DataBaseHelper.DeleteEmployee(SelectedProj);
+            if (success)
+            {
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                SelectedProj = Guid.Empty;
+                _mainWindowViewModel.CloseAddView();
+                _mainWindowViewModel.RefreshEmployee();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            
         }
     }
 }

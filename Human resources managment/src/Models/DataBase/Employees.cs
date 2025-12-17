@@ -1,11 +1,12 @@
-﻿using CSharpFunctionalExtensions;
-using Human_resources_managment.Models.ValueObject;
-using Human_resources_managment.Models.ValueObjectModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using CSharpFunctionalExtensions;
+using Human_resources_managment.Models.ValueObject;
+using Human_resources_managment.Models.ValueObjectModels;
 
 namespace Human_resources_managment.Models.DataBaseModels
 {
@@ -43,9 +44,19 @@ namespace Human_resources_managment.Models.DataBaseModels
 
         public PhoneVO Phone { get; private set; }
 
-        public Result<Employees> Create(FullNameVO fullNameVO, DateVO birthDate, DateVO hireDate, Guid positionId, Guid departmentId, EmailVO email, PhoneVO phone)
+        public static Result<Employees> Create(FullNameVO fullNameVO, DateVO birthDate, DateVO hireDate, Guid positionId, Guid departmentId, EmailVO email, PhoneVO phone)
         {
             return Result.Success(new Employees(fullNameVO, birthDate, hireDate, positionId, departmentId, email, phone));
+        }
+
+        public Result Update(EmailVO newEmail, PhoneVO newPhone, Guid newDepartId, Guid newPosId)
+        {
+            Email = newEmail;
+            Phone = newPhone;
+            DepartmentId = newDepartId;
+            PositionId = newPosId;
+
+            return Result.Success();
         }
 
     }

@@ -115,16 +115,16 @@ namespace Human_resources_managment.PostgresDataBase.Configurations
 
         private static void ConfigureRelations(EntityTypeBuilder<Employees> builder)
         {
-            // связь с Departments (1:1)
+            // связь с Departments 
             builder.HasOne(e => e.Department)
-                .WithOne(d => d.Employee)
-                .HasForeignKey<Employees>(e => e.DepartmentId)
+                .WithMany()
+                .HasForeignKey(e => e.DepartmentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // связь с Positions (1:1)
+            // связь с Positions 
             builder.HasOne(e => e.Position)
-                .WithOne(p => p.Employee)
-                .HasForeignKey<Employees>(e => e.PositionId)
+                .WithMany()
+                .HasForeignKey(e => e.PositionId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 

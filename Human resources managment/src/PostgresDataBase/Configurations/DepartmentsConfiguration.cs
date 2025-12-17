@@ -19,8 +19,9 @@ namespace Human_resources_managment.PostgresDataBase.Configurations
             ConfigureProperties(builder);
             // создание полей vo
             ConfigureValueObjects(builder);
-            // связи между таблицами
-            ConfigureRelations(builder);
+
+            //// связи между таблицами
+            //ConfigureRelations(builder);
         }
 
         private static void ConfigureTable(EntityTypeBuilder<Departments> builder)
@@ -59,19 +60,19 @@ namespace Human_resources_managment.PostgresDataBase.Configurations
             builder.Navigation(b => b.Name).IsRequired();
         }  
 
-        private static void ConfigureRelations(EntityTypeBuilder<Departments> builder)
-        {
-            ConfigureAuthorRelation(builder);
-        }
+        //private static void ConfigureRelations(EntityTypeBuilder<Departments> builder)
+        //{
+        //    ConfigureAuthorRelation(builder);
+        //}
 
-        private static void ConfigureAuthorRelation(EntityTypeBuilder<Departments> builder)
-        {
+        //private static void ConfigureAuthorRelation(EntityTypeBuilder<Departments> builder)
+        //{
 
-            builder.HasOne(d => d.Employee)
-                .WithOne(e => e.Department)
-                .HasForeignKey<Employees>(e => e.DepartmentId) // FK в Employees
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+        //    builder.HasOne(d => d.Employee)
+        //        .WithOne(e => e.Department)
+        //        .HasForeignKey<Employees>(e => e.DepartmentId) // FK в Employees
+        //        .OnDelete(DeleteBehavior.Cascade);
+        //}
 
 
     }

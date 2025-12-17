@@ -8,56 +8,20 @@
              
              xmlns:validate="clr-namespace:Human_resources_managment.Classes.Validate"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="500">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
 
-        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" >
-            <Grid Margin="5">
-                <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="ФИО" Style="{StaticResource textHint}" FontSize="20"/>
-                <TextBox x:Name="search"  Foreground="Crimson" TextChanged="search_TextChanged"  CaretBrush="Black"  Text="{Binding FIO, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
-            </Grid>
-        </Border>
+        <WrapPanel Orientation="Horizontal">
 
-        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
-            <DatePicker Name="datePicker1" Padding="5"
-                 materialDesign:HintAssist.Hint="Дата рождения" IsDropDownOpen="False"
-                 materialDesign:HintAssist.Foreground="Gray"
-                 SelectedDateFormat="Short"  VerticalAlignment="Center"
-                 Foreground="Black"
-                 Background="Red"
-                 FontSize="18"
-                 materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
-                 Language="ru-RU">
-                <DatePicker.SelectedDate>
-                    <Binding Path="SelectedDateForPickerBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <validate:ValidateDate ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </DatePicker.SelectedDate>
-            </DatePicker>
-        </Border>
 
-        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
-            <DatePicker Name="datePicker2" Padding="5"
-                 materialDesign:HintAssist.Hint="Дата приема" IsDropDownOpen="False"
-                 SelectedDateFormat="Short"  VerticalAlignment="Center"
-                 Foreground="Black"
-                 Background="Red"
-                 FontSize="18"
-                 materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
-                 Language="ru-RU">
-                <DatePicker.SelectedDate>
-                    <Binding Path="SelectedDateForPickerHire" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <validate:ValidateDate ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </DatePicker.SelectedDate>
-            </DatePicker>
-        </Border>
+            <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Height="40">
+                <Grid Margin="5">
+                    <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="ФИО" Style="{StaticResource textHint}" FontSize="20"/>
+                    <TextBox x:Name="search"  Foreground="Crimson" TextChanged="search_TextChanged"  CaretBrush="Black"  Text="{Binding FIO, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent"  Style="{StaticResource textBox}" FontSize="20"/>
+                </Grid>
+            </Border>
 
-        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="20 0 0 0">
             <Grid Margin="5">
                 <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="Почта" Style="{StaticResource textHint}" FontSize="20"/>
                 <TextBox x:Name="email" materialDesign:HintAssist.HelperText=""  Foreground="Crimson" TextChanged="email_TextChanged"  CaretBrush="Black" Background="Transparent"  Style="{StaticResource MaterialDesignFilledTextBox}" FontSize="20" Padding="2">
@@ -72,7 +36,7 @@
             </Grid>
         </Border>
 
-        <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" HorizontalAlignment="Center" Margin="0 20 0 0">
             <Grid Margin="5">
                 <TextBlock x:Name="textPhone" MouseDown="textPhone_MouseDown" Text="Телефон" Style="{StaticResource textHint}" FontSize="20"></TextBlock>
                 <TextBox x:Name="phone"  materialDesign:HintAssist.HelperText=""  Foreground="Crimson" TextChanged="phone_TextChanged"  CaretBrush="Black"  Background="Transparent"  Style="{StaticResource MaterialDesignFilledTextBox}" FontSize="20" Padding="2">
@@ -86,6 +50,80 @@
                 </TextBox>
             </Grid>
         </Border>
+
+            <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" Height="40" HorizontalAlignment="Center" Margin="20 20 0 0">
+                <DatePicker Name="datePicker2" Padding="5"
+                    materialDesign:HintAssist.Hint="Дата приема" IsDropDownOpen="False"
+                    SelectedDateFormat="Short"  VerticalAlignment="Center"
+                    Foreground="Black"
+                    Background="Red"
+                    FontSize="18"
+                    materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
+                    Language="ru-RU">
+                    <DatePicker.SelectedDate>
+                        <Binding Path="SelectedDateForPickerHire" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validate:ValidateDate ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DatePicker.SelectedDate>
+                </DatePicker>
+            </Border>
+
+            <Border BorderThickness="1"  BorderBrush="Red"  CornerRadius="5"  MinWidth="200" MaxWidth="300" Height="40" HorizontalAlignment="Center" Margin="0 20 0 0">
+                <DatePicker Name="datePicker1" Padding="5"
+                      materialDesign:HintAssist.Hint="Дата рождения" IsDropDownOpen="False"
+                      materialDesign:HintAssist.Foreground="Gray"
+                      SelectedDateFormat="Short"  VerticalAlignment="Center"
+                      Foreground="Black"
+                      Background="Red"
+                      FontSize="18"
+                      materialDesign:TextFieldAssist.UnderlineBrush="Crimson"
+                      Language="ru-RU">
+                    <DatePicker.SelectedDate>
+                        <Binding Path="SelectedDateForPickerBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validate:ValidateDate ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DatePicker.SelectedDate>
+                </DatePicker>
+            </Border>
+
+            <ComboBox x:Name="projBox"  IsEditable="True" IsTextSearchEnabled="False" 
+                ItemsSource="{Binding PositionDGModels}" 
+                 DisplayMemberPath="name"   
+                 SelectedValuePath="id"
+                 SelectedValue="{Binding SelectedPos, UpdateSourceTrigger=PropertyChanged}"
+                Width="200" Height="40" VerticalAlignment="Center" 
+                Background="White" BorderThickness="1"
+                Padding="5,0,5,0"
+                Margin="20 20 0 0"
+                FontSize="20"
+                BorderBrush="Crimson"
+                materialDesign:HintAssist.Hint="Должность"
+                materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                Style="{StaticResource MaterialDesignOutlinedComboBox}">
+            </ComboBox>
+
+            <ComboBox x:Name="projBoxDepart"  IsEditable="True" IsTextSearchEnabled="True" 
+                ItemsSource="{Binding DepartmenDGModels}" 
+                 DisplayMemberPath="name"   
+                 SelectedValuePath="id"
+                 SelectedValue="{Binding SelectedDepart, UpdateSourceTrigger=PropertyChanged}" 
+                Width="200" Height="40" VerticalAlignment="Center" 
+                Background="White" BorderThickness="1"
+                Padding="5,0,5,0"
+                Margin="0 20 0 0"
+                FontSize="20"
+                BorderBrush="Crimson"
+                materialDesign:HintAssist.Hint="Отдел"
+                materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                Style="{StaticResource MaterialDesignOutlinedComboBox}">
+            </ComboBox>
+
+
+        </WrapPanel>
 
         <Button Content="Сохранить" Margin="0 40 0 0" HorizontalAlignment="Center" FontSize="26" Height="45" Width="160" Style="{StaticResource backBttn}"  Cursor="Hand" Command="{Binding SaveCommand}"/>
     </StackPanel>

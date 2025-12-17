@@ -8,6 +8,7 @@ using System.Windows;
 using Human_resources_managment.DepartmentWindow.Model;
 using Human_resources_managment.EmployeeWindow.Model;
 using Human_resources_managment.Models.DataBaseModels;
+using Human_resources_managment.Models.ValueObject;
 using Human_resources_managment.Models.ValueObjectModels;
 using Human_resources_managment.PositionWindow.Model;
 using Human_resources_managment.PostgresDataBase;
@@ -115,7 +116,9 @@ namespace Human_resources_managment.Classes
                     departmentName = d.Department?.Name?.Name ?? "—",
                     email = d.Email.Email,
                     phone = d.Phone.Phone,
-                    id = d.Id
+                    id = d.Id,
+                    departmentId = d.DepartmentId,
+                    positionId = d.PositionId
                 }).ToList();
 
 
@@ -156,6 +159,248 @@ namespace Human_resources_managment.Classes
             {
                 return (false, $"Ошибка при добавлении департамента: {ex.Message}");
             }
+        }
+        public static async Task<(bool success, string message)> UpdateDepartment(Guid id, string newName, string? newDescription = null)
+        {
+            try
+            {
+                var nameVO = NameVO.Create(newName);
+                if (nameVO.IsFailure)
+                    return (false, nameVO.Error);
+
+                using var context = GetContext();
+
+                var department = await context.Departments
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (department == null)
+                    return (false, "Департамент не найден");
+
+                var result = department.Update(nameVO.Value, newDescription);
+                if (result.IsFailure)
+                    return (false, result.Error);
+
+                await context.SaveChangesAsync();
+                return (true, "Департамент успешно обновлён");
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при обновлении: {ex.Message}");
+            }
+        }
+        public static async Task<(bool success, string message)> DeleteDepartment(Guid id)
+        {
+            try
+            {
+                using var context = GetContext();
+
+                var department = await context.Departments
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (department == null)
+                    return (false, "Департамент не найден");
+
+                context.Departments.Remove(department);
+                await context.SaveChangesAsync();
+
+                return (true, "Департамент успешно удалён");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при удалении: {ex.Message}");
+            }
+        }
+
+        public static async Task<(bool success, string message)> AddPosition(string name)
+        {
+            try
+            {
+                var nameResult = NameVO.Create(name);
+                if (nameResult.IsFailure)
+                    return (false, nameResult.Error);
+
+                var posResult = Positions.Create(nameResult.Value);
+                if (posResult.IsFailure)
+                    return (false, posResult.Error);
+
+                var position = posResult.Value;
+
+                using var context = GetContext(); 
+                context.Positions.Add(position);
+                await context.SaveChangesAsync();
+
+                return (true, "Должность успешно добавлена");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при добавлении должности: {ex.Message}");
+            }
+        }
+        public static async Task<(bool success, string message)> UpdatePosition(Guid id, string newName)
+        {
+            try
+            {
+                var nameVO = NameVO.Create(newName);
+                if (nameVO.IsFailure)
+                    return (false, nameVO.Error);
+
+                using var context = GetContext();
+
+                var position = await context.Positions
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (position == null)
+                    return (false, "Должность не найдена");
+
+                var result = position.Update(nameVO.Value);
+                if (result.IsFailure)
+                    return (false, result.Error);
+
+                await context.SaveChangesAsync();
+                return (true, "Должность успешно обновлёна");
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при обновлении: {ex.Message}");
+            }
+        }
+        public static async Task<(bool success, string message)> DeletePosition(Guid id)
+        {
+            try
+            {
+                using var context = GetContext();
+
+                var position = await context.Positions
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (position == null)
+                    return (false, "Должность не найдена");
+
+                context.Positions.Remove(position);
+                await context.SaveChangesAsync();
+
+                return (true, "Должность успешно удалёна");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при удалении: {ex.Message}");
+            }
+        }
+
+        public static async Task<(bool success, string message)> AddEmployee(string firstName, string lastName, string? middleName, DateOnly? birthDate, DateOnly? hireDate, string email, string phone, Guid positionId, Guid departmentId)
+        {
+            try
+            {
+                var fullNameResult = FullNameVO.Create(firstName, lastName, middleName);
+                if (fullNameResult.IsFailure)
+                    return (false, $"Ошибка ФИО: {fullNameResult.Error}");
+
+                var emailResult = EmailVO.Create(email.Trim());
+                if (emailResult.IsFailure)
+                    return (false, $"Ошибка email: {emailResult.Error}");
+
+                var phoneResult = PhoneVO.Create(phone);
+                if (phoneResult.IsFailure)
+                    return (false, $"Ошибка телефона: {phoneResult.Error}");
+
+                var birthDateResult = DateVO.Create(birthDate);
+                if (birthDateResult.IsFailure)
+                    return (false, $"Ошибка даты рождения: {birthDateResult.Error}");
+
+                var hireDateResult = DateVO.Create(hireDate);
+                if (hireDateResult.IsFailure)
+                    return (false, $"Ошибка даты приёма: {hireDateResult.Error}");
+
+                var employeeResult = Employees.Create(fullNameResult.Value, birthDateResult.Value, hireDateResult.Value, positionId, departmentId, emailResult.Value, phoneResult.Value);
+
+                if (employeeResult.IsFailure)
+                    return (false, $"Ошибка создания сотрудника: {employeeResult.Error}");
+
+                using var context = GetContext();
+                context.Employees.Add(employeeResult.Value);
+                await context.SaveChangesAsync();
+
+                return (true, "Сотрудник успешно добавлен");
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка: {ex.Message}\n\nВнутренняя ошибка: {ex.InnerException?.Message}");
+            }
+        }
+
+        public static async Task<(bool success, string message)> UpdateEmployee(Guid id, string newEmail, string newPhone, Guid newDepartId, Guid newPosId)
+        {
+            try
+            {
+                var emailVO = EmailVO.Create(newEmail);
+                if (emailVO.IsFailure)
+                    return (false, emailVO.Error);
+
+                var phoneVO = PhoneVO.Create(newPhone);
+                if (phoneVO.IsFailure)
+                    return (false, phoneVO.Error);
+
+                using var context = GetContext();
+
+                var employee = await context.Employees
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (employee == null)
+                    return (false, "Сотрудник не найден");
+
+                var result = employee.Update(emailVO.Value, phoneVO.Value, newDepartId, newPosId);
+                if (result.IsFailure)
+                    return (false, result.Error);
+
+                await context.SaveChangesAsync();
+                return (true, "Сотрудник успешно обновлён");
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при обновлении: {ex.Message}");
+            }
+        }
+        public static async Task<(bool success, string message)> DeleteEmployee(Guid id)
+        {
+            try
+            {
+                using var context = GetContext();
+
+                var employee = await context.Employees
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (employee == null)
+                    return (false, "Сотрудник не найден");
+
+                context.Employees.Remove(employee);
+                await context.SaveChangesAsync();
+
+                return (true, "Сотрудник успешно удалён");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при удалении: {ex.Message}");
+            }
+        }
+
+        public static (string firstName, string lastName, string? middleName) ParseFio(string fio)
+        {
+            if (string.IsNullOrWhiteSpace(fio))
+                throw new ArgumentException("ФИО не может быть пустым", nameof(fio));
+
+            var parts = fio.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            return parts.Length switch
+            {
+                1 => (parts[0], "", null), 
+                2 => (parts[1], parts[0], null), 
+                >= 3 => (parts[1], parts[0], string.Join(" ", parts.Skip(2))), 
+                _ => throw new ArgumentException("Некорректный формат ФИО", nameof(fio))
+            };
         }
 
     }

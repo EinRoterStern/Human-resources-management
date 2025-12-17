@@ -19,7 +19,6 @@ namespace Human_resources_managment.Models.DataBaseModels
             Description = description;
         }
 
-        // ⚠️ EF Core ТРЕБУЕТ этот конструктор(может быть private!)
         private Departments() { }
 
         public Guid Id { get; private set; }
@@ -28,11 +27,18 @@ namespace Human_resources_managment.Models.DataBaseModels
 
         public string? Description { get; private set; }
 
-        public Employees Employee { get; private set; }
+        //public Employees Employee { get; private set; }
 
         public static Result<Departments> Create(NameVO name, string? description = null)
         {
             return Result.Success(new Departments(name, description));
+        }
+
+        public Result Update(NameVO newName, string? newDescription = null)
+        {
+            Name = newName;
+            Description = newDescription;
+            return Result.Success();
         }
     }
 }

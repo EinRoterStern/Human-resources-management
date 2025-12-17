@@ -85,6 +85,7 @@ namespace Human_resources_managment.DepartmentWindow.ViewModel
             else
             {
                 MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
         }

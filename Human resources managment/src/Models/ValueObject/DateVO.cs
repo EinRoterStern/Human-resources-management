@@ -15,18 +15,18 @@ namespace Human_resources_managment.Models.ValueObjectModels
             Date = DateOnly.MinValue; // или throw — но EF Core вызовет его, так что лучше MinValue
         }
 
-        private DateVO(DateOnly dateOnly) 
+        private DateVO(DateOnly? dateOnly) 
         {
             Date = dateOnly;
         }
 
-        public DateOnly Date {  get; private set; }
+        public DateOnly? Date {  get; private set; }
 
-        public static Result<DateVO> Create(DateOnly dateOnly)
+        public static Result<DateVO> Create(DateOnly? dateOnly)
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
-            if (dateOnly < today)
-                return Result.Failure<DateVO>($"Дата не может быть раньше сегодняшней ({today}). Указана дата: {dateOnly}.");
+            if (dateOnly > today)
+                return Result.Failure<DateVO>($"Дата не может быть позже сегодняшней ({today}). Указана дата: {dateOnly}.");
 
             var obj = new DateVO(dateOnly);
             return Result.Success<DateVO>(obj);

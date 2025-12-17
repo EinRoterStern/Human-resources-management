@@ -22,11 +22,17 @@ namespace Human_resources_managment.Models.DataBaseModels
 
         public NameVO Name { get; private set; }
 
-        public Employees Employee { get; private set; }
+        //public Employees Employee { get; private set; }
 
-        public Result<Positions> Create(NameVO name)
+        public static Result<Positions> Create(NameVO name)
         {
             return Result.Success(new Positions(name));
+        }
+
+        public Result Update(NameVO newName)
+        {
+            Name = newName;
+            return Result.Success();
         }
     }
 }

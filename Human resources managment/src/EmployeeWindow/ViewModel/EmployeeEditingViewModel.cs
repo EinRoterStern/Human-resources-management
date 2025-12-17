@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows;
-using Human_resources_managment.Classes;
-using Human_resources_managment.EmployeeWindow.Model;
-using Human_resources_managment.ViewModel;
-using System.ComponentModel;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Human_resources_managment.Classes;
 using Human_resources_managment.Classes.Validate;
+using Human_resources_managment.DepartmentWindow.Model;
+using Human_resources_managment.EmployeeWindow.Model;
+using Human_resources_managment.PositionWindow.Model;
+using Human_resources_managment.ViewModel;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Human_resources_managment.EmployeeWindow.ViewModel
@@ -20,11 +22,11 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
     public class EmployeeEditingViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainWindowViewModel;
-        private readonly ObservableCollection<EmployeeDGModel> _employeeDGModels;
+        //private readonly ObservableCollection<EmployeeDGModel> _employeeDGModels;
         public EmployeeEditingViewModel(MainViewModel mainView, ObservableCollection<EmployeeDGModel> employeeDGs ) 
         {
             _mainWindowViewModel = mainView;
-            _employeeDGModels = employeeDGs;
+            //_employeeDGModels = employeeDGs;
 
             _ = InitAsync();
 
@@ -33,52 +35,63 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
 
         public async Task InitAsync()
         {
-
-            if (_employeeDGModels == null)
+            var (employeeDG, messageEmpl) = await DataBaseHelper.GetEmployeeTable();
+            if (employeeDG != null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список сотрудников");
-                return;
-            }
-            if (_employeeDGModels.Count > 0)
-            {
-                FilteredProject = CollectionViewSource.GetDefaultView(_employeeDGModels.Select(d => d.FIO));
-                FilteredProject.Filter = FilterProject;
+                EmployeeDGModels = new ObservableCollection<EmployeeDGModel>(employeeDG.ToList());
             }
             else
-                FilteredProject = CollectionViewSource.GetDefaultView("Не удалось получить список сотрудников");
-
-
-            // Отдел
-            if (_employeeDGModels == null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredDepart = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
+                MessageBox.Show($"Ошибка: {messageEmpl}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                EmployeeDGModels = new ObservableCollection<EmployeeDGModel>(null);
                 return;
             }
-            if (_employeeDGModels.Count > 0)
+
+            var (departmentDG, message) = await DataBaseHelper.GetDepartmentTable();
+            if (departmentDG != null)
             {
-                FilteredDepart = CollectionViewSource.GetDefaultView(_employeeDGModels.Select(d => d.departmentName));
-                FilteredDepart.Filter = FilterDepart;
+                DepartmenDGModels = new ObservableCollection<DepartmentDGModel>(departmentDG.ToList());
             }
             else
-                FilteredDepart = CollectionViewSource.GetDefaultView("Не удалось получить список отделов");
-
-            // Должность
-            if (_employeeDGModels == null)
             {
-                MessageBox.Show("Не удалось получить таблицу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FilteredPos = CollectionViewSource.GetDefaultView("Не удалось получить список должностей");
+                MessageBox.Show($"Ошибка: {message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                DepartmenDGModels = new ObservableCollection<DepartmentDGModel>(null);
                 return;
             }
-            if (_employeeDGModels.Count > 0)
+
+            var (positionDG, messagePos) = await DataBaseHelper.GetPositionTable();
+            if (positionDG != null)
             {
-                FilteredPos = CollectionViewSource.GetDefaultView(_employeeDGModels.Select(d => d.positionName));
-                FilteredPos.Filter = FilterPos;
+                PositionDGModels = new ObservableCollection<PositionDGModel>(positionDG.ToList());
             }
             else
-                FilteredPos = CollectionViewSource.GetDefaultView("Не удалось получить список должностей");
+            {
+                MessageBox.Show($"Ошибка: {messagePos}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                PositionDGModels = new ObservableCollection<PositionDGModel>(null);
+                return;
+            }
 
+        }
+
+        private ObservableCollection<EmployeeDGModel> _employeeDGModels;
+        public ObservableCollection<EmployeeDGModel> EmployeeDGModels
+        {
+            get => _employeeDGModels;
+            set => SetProperty(ref _employeeDGModels, value);
+        }
+
+        private ObservableCollection<DepartmentDGModel> _departmenDGModels;
+        public ObservableCollection<DepartmentDGModel> DepartmenDGModels
+        {
+            get => _departmenDGModels;
+            set => SetProperty(ref _departmenDGModels, value);
+        }
+
+        private ObservableCollection<PositionDGModel> _positionDGModels;
+        public ObservableCollection<PositionDGModel> PositionDGModels
+        {
+            get => _positionDGModels;
+            set => SetProperty(ref _positionDGModels, value);
         }
 
         private string _email;
@@ -108,153 +121,63 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
 
 
         // Сотрудник
-        private object _selectedProj;
-        public object SelectedProj
+        private Guid _selectedProj;
+        public Guid SelectedProj
         {
             get => _selectedProj;
             set
             {
                 _selectedProj = value;
                 OnPropertyChanged();
-                if (_selectedProj != null && _selectedProj.ToString() != "Не удалось получить список сотрудников")
+                if (_selectedProj != Guid.Empty)
                 {
-                    LoadEmployee(_selectedProj.ToString());
+                    LoadEmployee(_selectedProj);
                 }
             }
         }
 
-        private ICollectionView _filteredProject;
-        public ICollectionView FilteredProject
+        private void LoadEmployee(Guid id)
         {
-            get => _filteredProject;
-            set { _filteredProject = value; OnPropertyChanged(); }
-        }
+            Email = _employeeDGModels.FirstOrDefault(d => d.id == id).email;
+            Phone = _employeeDGModels.FirstOrDefault(d => d.id == id).phone;
 
-        private string _filterTextProject;
-        public string FilterTextProject
-        {
-            get => _filterTextProject;
-            set
-            {
-                _filterTextProject = value;
-                OnPropertyChanged();
-                FilteredProject.Refresh(); // обновляем фильтр
-            }
-        }
+            var dep = _employeeDGModels.FirstOrDefault(d => d.id == id).departmentId;
+            SelectedDepart = (Guid)_departmenDGModels.FirstOrDefault(d => d.id == dep).id;
 
-        private bool FilterProject(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextProject) ||
-                       supply.ToLower().Contains(FilterTextProject.ToLower());
-            }
-            return false;
-        }
-
-        private void LoadEmployee(string employee)
-        {
-            Email = _employeeDGModels.FirstOrDefault(d => d.FIO == employee).email;
-            Phone = _employeeDGModels.FirstOrDefault(d => d.FIO == employee).phone;
-            SelectedDepart = _employeeDGModels.FirstOrDefault(d => d.FIO == employee).departmentName;
-            SelectedPos = _employeeDGModels.FirstOrDefault(d => d.FIO == employee).positionName;
+            var pos = _employeeDGModels.FirstOrDefault(d => d.id == id).positionId;
+            SelectedPos = (Guid)_positionDGModels.FirstOrDefault(d => d.id == pos).id;
         }
 
         // Отделы
-        private object _selectedDepart;
-        public object SelectedDepart
+        private Guid _selectedDepart;
+        public Guid SelectedDepart
         {
             get => _selectedDepart;
             set
             {
                 _selectedDepart = value;
                 OnPropertyChanged();
-
-                if (value != null)
-                    FilterTextDepart = value.ToString();
-
             }
         }
 
-        private ICollectionView _filteredDepart;
-        public ICollectionView FilteredDepart
-        {
-            get => _filteredDepart;
-            set { _filteredDepart = value; OnPropertyChanged(); }
-        }
-
-        private string _filterTextDepart;
-        public string FilterTextDepart
-        {
-            get => _filterTextDepart;
-            set
-            {
-                _filterTextDepart = value;
-                OnPropertyChanged();
-                FilteredDepart.Refresh(); // обновляем фильтр
-            }
-        }
-
-        private bool FilterDepart(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextDepart) ||
-                       supply.ToLower().Contains(FilterTextDepart.ToLower());
-            }
-            return false;
-        }
 
         // Должность
-        private object _selectedPos;
-        public object SelectedPos
+        private Guid _selectedPos;
+        public Guid SelectedPos
         {
             get => _selectedPos;
             set
             {
                 _selectedPos = value;
                 OnPropertyChanged();
-
-                if (value != null)
-                    FilterTextPos = value.ToString();
-
             }
-        }
-
-        private ICollectionView _filteredPos;
-        public ICollectionView FilteredPos
-        {
-            get => _filteredPos;
-            set { _filteredPos = value; OnPropertyChanged(); }
-        }
-
-        private string _filterTextPos;
-        public string FilterTextPos
-        {
-            get => _filterTextPos;
-            set
-            {
-                _filterTextPos = value;
-                OnPropertyChanged();
-                FilteredPos.Refresh(); // обновляем фильтр
-            }
-        }
-
-        private bool FilterPos(object obj)
-        {
-            if (obj is string supply)
-            {
-                return string.IsNullOrEmpty(FilterTextPos) ||
-                       supply.ToLower().Contains(FilterTextPos.ToLower());
-            }
-            return false;
         }
 
         public ICommand SaveCommand { get; set; }
 
         private async void ExecuteSave(object obj)
         {
-            if (SelectedProj == "Не удалось получить список сотрудников" || SelectedProj == null)
+            if (SelectedProj == Guid.Empty)
             {
                 MessageBox.Show("Не выбран сотрудник!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -274,20 +197,34 @@ namespace Human_resources_managment.EmployeeWindow.ViewModel
                 return;
             }
 
-            if(SelectedDepart == null || SelectedDepart == "Не удалось получить список отделов")
+            if(SelectedDepart == Guid.Empty)
             {
                 MessageBox.Show("Не выбран отдел", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (SelectedPos == null || SelectedPos == "Не удалось получить список должностей")
+            if (SelectedPos == Guid.Empty)
             {
                 MessageBox.Show("Не выбрана должность", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            _mainWindowViewModel.CloseAddView();
-            _mainWindowViewModel.RefreshEmployee();
+            var (success, message) = await DataBaseHelper.UpdateEmployee(SelectedProj,Email, Phone, SelectedDepart, SelectedPos);
+            if (success)
+            {
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                SelectedProj = Guid.Empty;
+                _mainWindowViewModel.CloseAddView();
+                _mainWindowViewModel.RefreshEmployee();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            
         }
 
     }

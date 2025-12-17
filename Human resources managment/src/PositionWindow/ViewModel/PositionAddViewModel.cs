@@ -47,15 +47,27 @@ namespace Human_resources_managment.PositionWindow.ViewModel
                 return;
             }
 
-            Tables.Add(new PositionDGModel
+            //Tables.Add(new PositionDGModel
+            //{
+            //    name = Name
+            //});
+
+            var (success, message) = await DataBaseHelper.AddPosition(Name);
+            if (success)
             {
-                name = Name
-            });
+                MessageBox.Show(message, "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
+                Name = null;
 
-            Name = null;
+                _mainViewModel.CloseAddView();
+                _mainViewModel.RefreshPosition();
+            }
+            else
+            {
+                MessageBox.Show($"{message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            _mainViewModel.CloseAddView();
-            _mainViewModel.RefreshPosition();
+           
         }
 
     }

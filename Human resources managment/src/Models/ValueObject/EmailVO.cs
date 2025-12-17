@@ -12,7 +12,7 @@ namespace Human_resources_managment.Models.ValueObjectModels
     {
         private EmailVO()
         {
-            Email = string.Empty; // EF Core перезапишет это значением из БД
+            Email = string.Empty; 
         }
 
         private EmailVO(string email) 

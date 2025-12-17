@@ -10,8 +10,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
         <ComboBox x:Name="projBox"  IsEditable="True" IsTextSearchEnabled="False" 
-           Text="{Binding FilterTextProject, UpdateSourceTrigger=PropertyChanged}" 
-           SelectedItem="{Binding SelectedProj, Mode=TwoWay}" ItemsSource="{Binding FilteredProject}" 
+            ItemsSource="{Binding EmployeeDGModels}" 
+              DisplayMemberPath="FIO"   
+              SelectedValuePath="id"
+              SelectedValue="{Binding SelectedProj, UpdateSourceTrigger=PropertyChanged}" 
            Width="200" Height="40" VerticalAlignment="Center" 
            Background="White" BorderThickness="1"
            Padding="5,0,5,0"
@@ -52,30 +54,36 @@
             </Grid>
         </Border>
 
-        <ComboBox   IsEditable="True" IsTextSearchEnabled="False" Margin="0 20 0 0"
-           Text="{Binding FilterTextDepart, UpdateSourceTrigger=PropertyChanged}" 
-           SelectedItem="{Binding SelectedDepart, Mode=TwoWay}" ItemsSource="{Binding FilteredDepart}" 
-           Width="200" Height="40" VerticalAlignment="Center" 
-           Background="White" BorderThickness="1"
-           Padding="5,0,5,0"
-           FontSize="20"
-           BorderBrush="Crimson"
-           materialDesign:HintAssist.Hint="Отдел"
-           materialDesign:ComboBoxAssist.ShowSelectedItem="True"
-           Style="{StaticResource MaterialDesignOutlinedComboBox}">
+        <ComboBox x:Name="projBoxDepart"  IsEditable="True" IsTextSearchEnabled="True" 
+             ItemsSource="{Binding DepartmenDGModels}" 
+              DisplayMemberPath="name"   
+              SelectedValuePath="id"
+              SelectedValue="{Binding SelectedDepart, UpdateSourceTrigger=PropertyChanged}" 
+             Width="200" Height="40" VerticalAlignment="Center" 
+             Background="White" BorderThickness="1"
+             Padding="5,0,5,0"
+             Margin="0 20 0 0"
+             FontSize="20"
+             BorderBrush="Crimson"
+             materialDesign:HintAssist.Hint="Отдел"
+             materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+             Style="{StaticResource MaterialDesignOutlinedComboBox}">
         </ComboBox>
 
-        <ComboBox   IsEditable="True" IsTextSearchEnabled="False" Margin="0 20 0 0"
-           Text="{Binding FilterTextPos, UpdateSourceTrigger=PropertyChanged}" 
-           SelectedItem="{Binding SelectedPos, Mode=TwoWay}" ItemsSource="{Binding FilteredPos}" 
-           Width="200" Height="40" VerticalAlignment="Center" 
-           Background="White" BorderThickness="1"
-           Padding="5,0,5,0"
-           FontSize="20"
-           BorderBrush="Crimson"
-           materialDesign:HintAssist.Hint="Должность"
-           materialDesign:ComboBoxAssist.ShowSelectedItem="True"
-           Style="{StaticResource MaterialDesignOutlinedComboBox}">
+        <ComboBox x:Name="projBoxPos"  IsEditable="True" IsTextSearchEnabled="False"  
+            ItemsSource="{Binding PositionDGModels}" 
+             DisplayMemberPath="name"   
+             SelectedValuePath="id"
+             SelectedValue="{Binding SelectedPos, UpdateSourceTrigger=PropertyChanged}"
+            Width="200" Height="40" VerticalAlignment="Center" 
+            Background="White" BorderThickness="1"
+            Padding="5,0,5,0"
+            Margin="0 20 0 0"
+            FontSize="20"
+            BorderBrush="Crimson"
+            materialDesign:HintAssist.Hint="Должность"
+            materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+            Style="{StaticResource MaterialDesignOutlinedComboBox}">
         </ComboBox>
 
         <Button Content="Сохранить" Margin="0 20 0 0" HorizontalAlignment="Center" FontSize="26" Height="45" Width="160" Style="{StaticResource backBttn}"  Cursor="Hand" Command="{Binding SaveCommand}"/>
